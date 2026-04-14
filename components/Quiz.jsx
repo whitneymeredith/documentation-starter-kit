@@ -146,10 +146,10 @@ export default function Quiz() {
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6 }}>{r.description}</p>
         <a href={r.link} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: '1rem', padding: '0.75rem 1.5rem', background: r.color, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 'bold', fontSize: '1rem' }}>Try {r.name}</a>
         <br /><br />
-        <button onClick={restart} style={{ padding: '0.5rem 1rem', cursor: 'pointer', borderRadius: 8, border: '1px solid #ccc' }}>
+        <button onClick={restart} style={{ padding: '0.5rem 1rem', cursor: 'pointer', borderRadius: 8, border: '1px solid #555', background: 'transparent', color: 'inherit', fontSize: '1rem' }}>
           Retake Quiz
         </button>
-        {saved && <p style={{ color: 'green', marginTop: '1rem' }}>Result saved to Supabase!</p>}
+        {saved && <p style={{ color: '#4ade80', marginTop: '1rem' }}>Result saved to Supabase!</p>}
       </div>
     )
   }
@@ -158,13 +158,13 @@ export default function Quiz() {
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '2rem' }}>
       <h1>Which LLM Are You? 🤖</h1>
-      <p style={{ color: '#666' }}>Question {current + 1} of {questions.length}</p>
-      <div style={{ background: '#f5f5f5', borderRadius: 8, padding: '1rem', marginBottom: '1.5rem' }}>
+      <p style={{ color: 'inherit', opacity: 0.6 }}>Question {current + 1} of {questions.length}</p>
+      <div style={{ background: 'transparent', border: '1px solid #444', borderRadius: 8, padding: '1rem', marginBottom: '1.5rem' }}>
         <h2>{q.question}</h2>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {q.options.map((option, i) => (
-          <button key={i} onClick={() => handleAnswer(option)} style={{ padding: '0.75rem 1rem', textAlign: 'left', cursor: 'pointer', borderRadius: 8, border: selectedOption === option.text ? '1px solid #86efac' : '1px solid #ddd', background: selectedOption === option.text ? '#dcfce7' : 'white', fontSize: '1rem', transition: 'all 0.2s' }}>
+          <button key={i} onClick={() => handleAnswer(option)} style={{ padding: '0.75rem 1rem', textAlign: 'left', cursor: 'pointer', borderRadius: 8, border: selectedOption === option.text ? '1px solid #4ade80' : '1px solid #555', background: selectedOption === option.text ? 'rgba(74, 222, 128, 0.15)' : 'transparent', color: 'inherit', fontSize: '1rem', transition: 'all 0.2s' }}>
             {option.text}
           </button>
         ))}
