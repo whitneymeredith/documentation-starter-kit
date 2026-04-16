@@ -1,31 +1,106 @@
-# Code demo
+# How to add Supabase to this site
 
-```js filename="demo.js" {3} copy
-let a = 1;
+I performed the following steps to add Supabase to my Next.js site:
 
-console.log(a);
+## 1. Install Supabase
+
+Run the following command to install Supabase:
+
+```bash 
+npm install @supabase/supabase-js
 ```
 
-## Component
+## 2. Create .env.local
 
-import { useState } from 'react'
+An environment variables file allows you to store sensitive credentials that your app needs but that you don't want to share publicly.
 
-{/* Import CSS modules */}
-import styles from '../components/counters.module.css'
+Run the following command to create the `.env.local` file:
 
-export const Counter = () => {
-  const [count, setCount] = useState(0);
-  return (
-    <div>
-      <button onClick={() => setCount(count + 1)} className={styles.counter}>Clicked {count} times</button>
-    </div>
-  );
-};
+```bash
 
-<Counter/>
+notepad .env.local
 
-## External Component
+```
 
-import Counters from '../components/counters'
+Paste your Supabase URL and Anon Key into the file. You can get your anon key from Supabase > **Settings → API → anon public**. For example:
 
-<Counters />
+``` bash
+NEXT_PUBLIC_SUPABASE_URL=https://kfvzkkuwbekhxhqthbem.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
+```
+
+## 3. Create the lib folder and Supabase client
+
+`mkdir lib` creates a new folder called lib inside your project. This is a convention in Next.js projects for storing utility or helper files that aren't pages or components.
+`notepad lib\supabaseClient.js` creates and opens a new file called `supabaseClient.js` inside the lib folder. This file is where you set up your Supabase connection by creating the client and importing it into your app. This allows your app to talk to Supabase.
+
+Run the following commands to create your lib folder and Supabase client:
+
+```javascript
+mkdir lib
+notepad lib\supabaseClient.js
+```
+
+Paste in the following:
+
+```javascript
+import { createClient } from '@supabase/supabase-js'
+
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
+
+```
+
+## 4. Create the table in Supabase
+
+Go to Supabase > **SQL Editor** and run the following command:
+
+```sql
+
+create table quiz_results (
+  id bigint generated always as identity primary key,
+  created_at timestamp with time zone default now(),
+  answers jsonb,
+  result text
+);
+```
+
+## 5. Add RLS policies
+
+RLS (Row Level Security) allows you to control who can read and write to your database tables in Supabase. RLS is enabled and everything is blocked by default when you create a table in Supabase. No one can read or write to your table until you explicitly create policies allowing them to. 
+
+Add the following two policies:
+
+- `allow_anonymous_insert`: Allows anyone, including users who aren't logged in, to submit quiz results. This is necessary because people taking the quiz don't have accounts. The `with check (true)` allows all inserts with no conditions.
+- `allow_public_select`: Allows anyone to read the quiz results. This is needed for a results dashboard that shows which LLM people get matched to most. The `using (true)` enables access with no conditions.
+
+Run the following commands in Supabase > **SQL Editor** to add RLS policies:
+
+```sql
+create policy "allow_anonymous_insert"
+on "public"."quiz_results"
+as PERMISSIVE
+for INSERT
+to public
+with check (true);
+```
+
+```sql
+create policy "allow_public_select"
+on "public"."quiz_results"
+as PERMISSIVE
+for SELECT
+to public
+using (true);
+```
+
+## 6. Restart the dev server
+
+Press ctrl+c to stop the server and then run the following command to restart your dev server:
+
+```bash
+
+npm run dev
+```
