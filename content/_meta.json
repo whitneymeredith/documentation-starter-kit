@@ -1,8 +1,7 @@
 {
   "index": "Introduction",
   "quiz": "Which LLM Are You? 🤖",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "another": "How to add Supabase to a Next.js site",
   "about": {
     "title": "About",
     "type": "page"
