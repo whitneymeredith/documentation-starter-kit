@@ -2,7 +2,7 @@
   "index": "Introduction",
   "quiz": "Which LLM Are You? 🤖",
   "results": "Quiz Results",
-  "another": "How to add Supabase to a Next.js site",
+  "how-to": "How to add Supabase to a Next.js site",
   "about": {
     "title": "About",
     "type": "page"
